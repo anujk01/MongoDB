@@ -1,0 +1,279 @@
+1. CRUD Commands-------------------------------------------------------------------------------------------------------------------
+
+
+db.Student.insertOne({Name: "Rohit"})
+Output:
+{
+   "acknowledged" : true,
+   "insertedId" : ObjectId("629eaec2e80ed7a7d247efb4")
+}
+
+
+db.Student.insert([{Name: "Mohit"}, {Email: "mohit45@gmail.com"}])
+Output:
+BulkWriteResult({
+"writeErrors" : [ ],
+"writeConcernErrors" : [ ],
+"nInserted" : 2,
+"nUpserted" : 0,
+"nMatched" : 0,
+"nModified" : 0,
+"nRemoved" : 0,
+"upserted" : [ ]
+
+
+db.Student.insertMany([{Name: "Deepak"},{Name: "Priyanka"}])
+Output:
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("629eb912e80ed7a7d247efb9"),
+                ObjectId("629eb912e80ed7a7d247efba")
+        ]
+}
+
+
+db.Student.findOne({Name: "Rahul"})
+Output:
+{
+        "_id" : ObjectId("629d5ea0400134e985f2d566"),
+        "Name" : "Rahul",
+        "Email" : "rahul478@gmail.com",
+        "Age" : 17,
+        "Class" : 12,
+        "Address" : "Haldwani"
+}
+
+
+db.Student.countDocuments({Class:12})
+Output:
+4
+
+
+db.Student.find()
+Output:
+{ "_id" : ObjectId("6296505efda412f4d7a8ae0b"), "Name" : "Vishal", "Email" : "vishal42@gmail.com", "Age " : 17, "Class" : 12, "Address" : "Delhi" }
+{ "_id" : ObjectId("629d5e02400134e985f2d565"), "Name" : "Kamal", "Email" : "kamal457@gmail.com", "Age" : 15, "Class" : 9, "Address" : "Nainital" }
+{ "_id" : ObjectId("629d5ea0400134e985f2d566"), "Name" : "Rahul", "Email" : "rahul478@gmail.com", "Age" : 17, "Class" : 12, "Address" : "Haldwani" }
+{ "_id" : ObjectId("629d5f03400134e985f2d567"), "Name" : "Payal", "Email" : "payal261@gmail.com", "Age" : 16, "Class" : 11, "Address" : "Dehradun" }
+{ "_id" : ObjectId("629d5f32400134e985f2d568"), "Name" : "Jiya", "Email" : "jiya124Wgmail.com", "Age" : 17, "Class" : 12, "Address" : "Dehradun" }
+{ "_id" : ObjectId("629d5f7a400134e985f2d569"), "Name" : "Anuj", "Email" : "anuj97@gmail.com", "Age" : 18, "Class" : 12, "Address" : "Rudrapur" }
+{ "_id" : ObjectId("629eaec2e80ed7a7d247efb4"), "Name" : "Rohit" }
+{ "_id" : ObjectId("629eafb1e80ed7a7d247efb5"), "Name" : "Mohit" }
+{ "_id" : ObjectId("629eafb1e80ed7a7d247efb6"), "Email" : "mohit45@gmail.com" }
+
+
+db.Student.update({Name: "Rahul"}, {Age:20})
+Output:
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+
+db.Student.updateOne({Name: "Payal"}, {$set: {Age:25}})
+Output:
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+
+db.coll.updateMany({"Age": 17}, {$set: {"Age": "19"}})
+Output:
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+
+
+db.Student.remove({Name: "Deepak"})
+Output:
+WriteResult({ "nRemoved" : 1 })
+
+
+db.Student.remove({})
+Output:
+WriteResult({ "nRemoved" : 12 })
+
+
+db.Student.findOneAndDelete({"Name": "Priyanka"})
+Output:
+{ "_id" : ObjectId("629eb912e80ed7a7d247efba"), "Name" : "Priyanka" }
+
+
+
+2. Aggregation Commands ----------------------------------------------------------------------------------------------------------
+
+db.Student.aggregate([])
+Output:
+{ "_id" : ObjectId("6296505efda412f4d7a8ae0b"), "Name" : "Vishal", "Email" : "vishal42@gmail.com", "Age " : "17", "Class" : "12", "Address" : "Delhi" }
+{ "_id" : ObjectId("629d5e02400134e985f2d565"), "Name" : "Kamal", "Email" : "kamal457@gmail.com", "Age" : "15", "Class" : "9", "Address" : "Nainital" }
+{ "_id" : ObjectId("629d5ea0400134e985f2d566"), "Name" : "Rahul", "Email" : "rahul478@gmail.com", "Age" : "17", "Class" : "12", "Address" : "Haldwani" }
+{ "_id" : ObjectId("629d5f03400134e985f2d567"), "Name" : "Payal", "Email" : "payal261@gmail.com", "Age" : "16", "Class" : "11", "Address" : "Dehradun" }
+{ "_id" : ObjectId("629d5f32400134e985f2d568"), "Name" : "Jiya", "Email" : "jiya124Wgmail.com", "Age" : "17", "Class" : "12", "Address" : "Dehradun" }
+{ "_id" : ObjectId("629d5f7a400134e985f2d569"), "Name" : "Anuj", "Email" : "anuj97@gmail.com", "Age" : "18", "Class" : "12", "Address" : "Rudrapur" }
+
+
+db.Student.aggregate([{$sort:{"Age":1}}])
+Output:
+{ "_id" : ObjectId("6296505efda412f4d7a8ae0b"), "Name" : "Vishal", "Email" : "vishal42@gmail.com", "Age " : "17", "Class" : "12", "Address" : "Delhi" }
+{ "_id" : ObjectId("629d5e02400134e985f2d565"), "Name" : "Kamal", "Email" : "kamal457@gmail.com", "Age" : "15", "Class" : "9", "Address" : "Nainital" }
+{ "_id" : ObjectId("629d5f03400134e985f2d567"), "Name" : "Payal", "Email" : "payal261@gmail.com", "Age" : "16", "Class" : "11", "Address" : "Dehradun" }
+{ "_id" : ObjectId("629d5ea0400134e985f2d566"), "Name" : "Rahul", "Email" : "rahul478@gmail.com", "Age" : "17", "Class" : "12", "Address" : "Haldwani" }
+{ "_id" : ObjectId("629d5f32400134e985f2d568"), "Name" : "Jiya", "Email" : "jiya124Wgmail.com", "Age" : "17", "Class" : "12", "Address" : "Dehradun" }
+{ "_id" : ObjectId("629d5f7a400134e985f2d569"), "Name" : "Anuj", "Email" : "anuj97@gmail.com", "Age" : "18", "Class" : "12", "Address" : "Rudrapur" }
+
+db.Student.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : "$Class"}}}])
+Output:
+{"_id" : null, "num_tutorial" : 68 }
+
+
+db.Student.aggregate([{$group : {_id : "$by_user", num_tutorial : {$avg : "$Age"}}}])
+Output:
+{ "_id" : null, "num_tutorial" : 16.6 }
+
+
+db.Student.aggregate([{$group : {_id : "$by_user", num_tutorial : {$min : "$Age"}}}])
+Output:
+{ "_id" : null, "num_tutorial" : 15 }
+
+
+db.Student.aggregate([{$group : {_id : "$by_user", num_tutorial : {$max : "$Class"}}}])
+Output:
+{ "_id" : null, "num_tutorial" : 12 }
+
+
+db.Student.aggregate([{$group : {_id : "$by_user", Class : {$push: "$Class"}}}])
+Output:
+{ "_id" : null, "Class" : [ 12, 9, 12, 11, 12, 12 ] }
+
+
+db.Student.aggregate([{$group : {_id : "$by_user", Class : {$addToSet : "$Class"}}}])
+Output:
+{ "_id" : null, "Class" : [ 9, 11, 12 ] }
+
+
+db.Student.aggregate([{$group : {_id : "$by_user", Class : {$first : "$Class"}}}])
+Output:
+{ "_id" : null, "Class" : 12 }
+
+
+db.Student.aggregate([{$group : {_id : "$by_user", Age : {$last : "$Age"}}}])
+Output:
+{ "_id" : null, "Age" : 18 }
+
+
+
+3. Transactions ------------------------------------------------------------------------------------------------------------
+
+
+CREATE:
+
+session.startTransaction()
+session.getDatabase('MongoDBDemo').DBDemo.insertOne({'Name': "Deepak", 'Gender': "Male"})
+Output:
+{ acknowledged: true,
+  insertedId: ObjectId("629eb5763ecbdaa633ed32f5") }
+session.commitTransaction()
+{
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1654568344, i: 1 }),
+    signature: {
+      hash: Binary(Buffer.from("67262dc0373cd151856e87fcd7b911cdde47b341", "hex"), 0),
+      keyId: Long("7080466643603685380")
+    }
+  },
+  operationTime: Timestamp({ t: 1654568344, i: 1 })
+}
+
+
+READ:
+
+session.startTransaction()
+session.getDatabase('MongoDBDemo').DBDemo.findOne({'Name':"Anuj"})
+Output:
+{ _id: ObjectId("629e31e522ef76656678e37f"),
+  Name: 'Anuj',
+  Gender: 'Male',
+  Age: 22,
+  Address: 'Delhi' }
+
+
+session.getDatabase('MongoDBDemo').DBDemo.find({})
+Output:
+{ _id: ObjectId("629e31e522ef76656678e37f"),
+  Name: 'Anuj',
+  Gender: 'Male',
+  Age: 22,
+  Address: 'Delhi' }
+
+{ _id: ObjectId("629e324d22ef76656678e380"),
+  Name: 'Kamal',
+  Gender: 'Male',
+  Age: 20,
+  Address: 'Dehradun' }
+
+{ _id: ObjectId("629e328e22ef76656678e381"),
+  Name: 'Priya',
+  Gender: 'Female',
+  Age: 19,
+  Address: 'Chandigarh' }
+
+{ _id: ObjectId("629e32bd22ef76656678e382"),
+  Name: 'Rahul',
+  Gender: 'Male',
+  Age: 18,
+  Address: 'Nainital' }
+
+{ _id: ObjectId("629e331122ef76656678e383"),
+  Name: 'Rohit',
+  Gender: 'Male',
+  Age: 23,
+  Address: 'Haldwani' }
+
+{ _id: ObjectId("629e333f22ef76656678e384"),
+  Name: 'Himanshu',
+  Gender: 'Male',
+  Age: 24,
+  Address: 'Gurugram' }
+
+
+UPDATE:
+session.startTransaction()
+session.getDatabase('MongoDBDemo').DBDemo.updateOne({'Name':"Anuj"},{$set:{Age:22}})
+Output:
+{ acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0 }
+
+
+
+DELETE:
+session.getDatabase('MongoDBDemo').DBDemo.deleteOne({'Name':"Anuj"},{$set:{Age:22}})
+Output:
+{ acknowledged: true, deletedCount: 1 }
+session.commitTransaction()
+{
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1654511057, i: 1 }),
+    signature: {
+      hash: Binary(Buffer.from("bec95b7bb9402f0eaea3432b6e4ab5e62d55f021", "hex"), 0),
+      keyId: Long("7080466643603685380")
+    }
+  },
+  operationTime: Timestamp({ t: 1654511057, i: 1 })
+}
+
+
+
+session.getDatabase('MongoDBDemo').DBDemo.deleteMany({})
+Output:
+{ acknowledged: true, deletedCount: 3 }
+session.commitTransaction()
+{
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1654511265, i: 3 }),
+    signature: {
+      hash: Binary(Buffer.from("814dc3a79ced81904ad56b1a3eeb812144b0ba29", "hex"), 0),
+      keyId: Long("7080466643603685380")
+    }
+  },
+  operationTime: Timestamp({ t: 1654511265, i: 1 })
+}
