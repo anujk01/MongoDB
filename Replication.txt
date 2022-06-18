@@ -1,0 +1,255 @@
+REPLICATION------------------------------------------------------------------------------------------------------------------------------------------
+
+
+C:\Users\anujk>cd C:\Program Files\MongoDB\Server\5.0\bin
+
+C:\Program Files\MongoDB\Server\5.0\bin>start mongod -replSet anuj -logpath \data\rs1\1.log --dbpath \data\rs2 --port2020
+
+C:\Program Files\MongoDB\Server\5.0\bin>start mongod -replSet anuj -logpath \data\rs2\2.log --dbpath \data\rs2 --port 2021
+
+C:\Program Files\MongoDB\Server\5.0\bin>start mongod -replSet anuj -logpath \data\rs3\3.log --dbpath \data\rs3 --port 2022
+
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongo --port 2020
+
+MongoDB shell version v5.0.8
+connecting to: mongodb://127.0.0.1:2020/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("64c0b9a9-f11d-4a6b-9c8f-34d353778a2c") }
+MongoDB server version: 5.0.8
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2022-06-09T11:29:31.644+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+        2022-06-09T11:29:31.645+05:30: This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+
+
+
+config = {_id:"anuj",members:[{_id:0,host:"localhost:2020"}, {_id:1,host:"localhost:2021"},{_id:2,host:"localhost:2022"}]}
+
+{
+        "_id" : "anuj",
+        "members" : [
+                {
+                        "_id" : 0,
+                        "host" : "localhost:2020"
+                },
+                {
+                        "_id" : 1,
+                        "host" : "localhost:2021"
+                },
+                {
+                        "_id" : 2,
+                        "host" : "localhost:2022"
+                }
+        ]
+}
+
+
+> rs.initiate(config)
+
+{ "ok" : 1 }
+
+
+
+anuj:SECONDARY> rs.status()
+{
+        "set" : "anuj",
+        "date" : ISODate("2022-06-09T06:42:39.697Z"),
+        "myState" : 1,
+        "term" : NumberLong(1),
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "votingMembersCount" : 3,
+        "writableVotingMembersCount" : 3,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1654756948, 7),
+                        "t" : NumberLong(1)
+                },
+                "lastCommittedWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1654756948, 7),
+                        "t" : NumberLong(1)
+                },
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1654756948, 7),
+                        "t" : NumberLong(1)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1654756948, 7),
+                        "t" : NumberLong(1)
+                },
+                "lastAppliedWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                "lastDurableWallTime" : ISODate("2022-06-09T06:42:28.915Z")        },
+        "lastStableRecoveryTimestamp" : Timestamp(1654756937, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "electionTimeout",
+                "lastElectionDate" : ISODate("2022-06-09T06:42:27.672Z"),
+                "electionTerm" : NumberLong(1),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1654756937, 1),
+                        "t" : NumberLong(-1)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1654756937, 1),
+                        "t" : NumberLong(-1)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 1,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2022-06-09T06:42:27.716Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2022-06-09T06:42:28.794Z")
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:2020",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 2589,
+                        "optime" : {
+                                "ts" : Timestamp(1654756948, 7),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2022-06-09T06:42:28Z"),
+                        "lastAppliedWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                        "lastDurableWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1654756947, 1),
+                        "electionDate" : ISODate("2022-06-09T06:42:27Z"),
+                        "configVersion" : 1,
+                        "configTerm" : 1,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:2021",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 22,
+                        "optime" : {
+                                "ts" : Timestamp(1654756948, 7),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1654756948, 7),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2022-06-09T06:42:28Z"),
+                        "optimeDurableDate" : ISODate("2022-06-09T06:42:28Z"),
+                        "lastAppliedWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                        "lastDurableWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                        "lastHeartbeat" : ISODate("2022-06-09T06:42:39.689Z"),
+                        "lastHeartbeatRecv" : ISODate("2022-06-09T06:42:39.199Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncSourceHost" : "localhost:2020",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1,
+                        "configTerm" : 1
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:2022",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 22,
+                        "optime" : {
+                                "ts" : Timestamp(1654756948, 7),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1654756948, 7),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2022-06-09T06:42:28Z"),
+                        "optimeDurableDate" : ISODate("2022-06-09T06:42:28Z"),
+                        "lastAppliedWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                        "lastDurableWallTime" : ISODate("2022-06-09T06:42:28.915Z"),
+                        "lastHeartbeat" : ISODate("2022-06-09T06:42:39.691Z"),
+                        "lastHeartbeatRecv" : ISODate("2022-06-09T06:42:39.199Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncSourceHost" : "localhost:2020",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1,
+                        "configTerm" : 1
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1654756948, 7),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1654756948, 7)
+}
+
+
+anuj:PRIMARY> show dbs
+
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+
+anuj:PRIMARY> use anujdb
+
+switched to db anujdb
+
+anuj:PRIMARY> db.student.insert({Name:"Rahul"})
+WriteResult({ "nInserted" : 1 })
+
+
+anuj:PRIMARY> db.shutdownServer();
+
+server should be down... 
+(After shutting down primary server, automatically secondary server becomes primary server)
+
+Now we can add data to secondary server
+
+anuj:SECONDARY> db.student.find()
+
+{ "_id" : ObjectId("62a197208c984511e0fcd922"), "Name" : "Rahul" }
+
+anuj:PRIMARY> db.student.insert({Name: "Kamal"})
+WriteResult({ "nInserted" : 1 })
+
+anuj:PRIMARY> db.student.find()
+{ "_id" : ObjectId("62a197208c984511e0fcd922"), "Name" : "Rahul" }
+{ "_id" : ObjectId("62a1aac731ff3e84d6295afd"), "Name" : "Kamal" }
+
+
+SHARDING--------------------------------------------------------------------------------------------------------------------------------------------
+
+
