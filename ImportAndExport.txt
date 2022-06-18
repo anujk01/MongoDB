@@ -1,0 +1,124 @@
+Import and Export Files MongoDB----------------------------------------------------------------------------------------------------------------------------
+
+
+C:\windows\system32>cd C:\Program Files\MongoDB\Server\5.0\bin
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongodump
+2022-06-13T08:40:37.416+0530    writing admin.system.users to dump\admin\system.users.bson
+2022-06-13T08:40:37.423+0530    done dumping admin.system.users (1 document)
+2022-06-13T08:40:37.424+0530    writing admin.system.version to dump\admin\system.version.bson
+2022-06-13T08:40:37.428+0530    done dumping admin.system.version (2 documents)
+2022-06-13T08:40:37.430+0530    writing admin.Demo to dump\admin\Demo.bson
+2022-06-13T08:40:37.433+0530    done dumping admin.Demo (4 documents)
+2022-06-13T08:40:37.740+0530    writing Student.Student to dump\Student\Student.bson
+2022-06-13T08:40:37.740+0530    writing SchoolDB.Student to dump\SchoolDB\Student.bson
+2022-06-13T08:40:37.744+0530    done dumping SchoolDB.Student (2 documents)
+2022-06-13T08:40:37.744+0530    done dumping Student.Student (11 documents)
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongodump --db test
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongodump --db test
+2022-06-13T08:49:36.811+0530    writing test.experiment to dump\test\experiment.bson
+2022-06-13T08:49:36.817+0530    done dumping test.experiment (1 document)
+
+
+In Another Terminal -----------------------------------------------
+
+
+MongoDB shell version v5.0.8
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("fa0571ec-2d09-4b19-a080-f88a4ad90bf9") }
+MongoDB shell version v5.0.8
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("fa0571ec-2d09-4b19-a080-f88a4ad90bf9") }
+MongoDB server version: 5.0.8
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will bwhich delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+e removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2022-06-11T09:12:20.165+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> show dbs
+SchoolDB  0.000GB
+Student   0.000GB
+admin     0.000GB
+config    0.000GB
+local     0.000GB
+> show dbs
+SchoolDB  0.000GB
+Student   0.000GB
+admin     0.000GB
+config    0.000GB
+local     0.000GB
+test      0.000GB
+> use test
+switched to db test
+>
+>
+>
+>
+> db.dropDatabase()
+{ "ok" : 1 }
+
+> show dbs
+SchoolDB  0.000GB
+Student   0.000GB
+admin     0.000GB
+config    0.000GB
+local     0.000GB
+
+Restoring ----------------------------------------------------------------------------------
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongorestore --db test dump/test
+2022-06-13T09:05:37.561+0530    The --db and --collection flags are deprecated for this use-case; please use --nsInclude instead, i.e. with --nsInclude=${DATABASE}.${COLLECTION}
+2022-06-13T09:05:37.565+0530    building a list of collections to restore from dump\test dir
+2022-06-13T09:05:37.572+0530    reading metadata for test.experiment from dump\test\experiment.metadata.json
+2022-06-13T09:05:37.595+0530    restoring test.experiment from dump\test\experiment.bson
+2022-06-13T09:05:37.620+0530    finished restoring test.experiment (1 document, 0 failures)
+2022-06-13T09:05:37.620+0530    no indexes to restore for collection test.experiment
+2022-06-13T09:05:37.622+0530    1 document(s) restored successfully. 0 document(s) failed to restore.
+
+
+After Restoring Show DBS------------------------------------------------------------------------
+
+
+> show dbs
+SchoolDB  0.000GB
+Student   0.000GB
+admin     0.000GB
+config    0.000GB
+local     0.000GB
+test      0.000GB
+> use test
+switched to db test
+> show collections
+experiment
+> db.test.find()
+> db.experiment.find()
+{ "_id" : ObjectId("62a6ac694b509f68587945a7"), "experiment" : 1, "Place" : "School", "Lab" : 4 }
+> db.experiment.find().pretty()
+{
+        "_id" : ObjectId("62a6ac694b509f68587945a7"),
+        "experiment" : 1,
+        "Place" : "School",
+        "Lab" : 4
+}
