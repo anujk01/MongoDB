@@ -1,0 +1,175 @@
+AUTHENTICATION-------------------------------------------------------------------------------------------------------------------------------
+
+C:\Users\anujk>mongo
+MongoDB shell version v5.0.8
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("64dd59e5-6231-4e97-855b-149083d57711") }
+MongoDB server version: 5.0.8
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+---
+The server generated these startup warnings when booting:
+        2022-06-09T15:53:01.726+05:30: Access control is not enabled for the database. Read and write access to data  and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> show dbs
+SchoolDB  0.000GB
+Student   0.000GB
+admin     0.000GB
+config    0.000GB
+local     0.000GB
+
+> use SchoolDB
+switched to db SchoolDB
+
+> db.Student.find()
+{ "_id" : ObjectId("62a0bdd228ae00befe383834"), "Name" : "Anuj", "Age" : 24, "Gender" : "Male" }
+{ "_id" : ObjectId("62a0bf570134165b0b708118"), "Name" : "Rohit", "Age" : 25 }
+
+> db.createUser({user:"anujkumar", pwd:"123456", roles:[{role:"read", db:"SchoolDB"}]})
+uncaught exception: Error: couldn't add user: User "anujkumar@SchoolDB" already exists :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+DB.prototype.createUser@src/mongo/shell/db.js:1367:11
+@(shell):1:1
+
+> show users
+{
+        "_id" : "SchoolDB.anujkumar",
+        "userId" : UUID("668d0a2d-5de5-401b-9f63-8bd72782de83"),
+        "user" : "anujkumar",
+        "db" : "SchoolDB",
+        "roles" : [
+                {
+                        "role" : "read",
+                        "db" : "SchoolDB"
+                }
+        ],
+        "mechanisms" : [
+                "SCRAM-SHA-1",
+                "SCRAM-SHA-256"
+        ]
+}
+> show roles
+{
+        "role" : "enableSharding",
+        "db" : "SchoolDB",
+        "isBuiltin" : true,
+        "roles" : [ ],
+        "inheritedRoles" : [ ]
+}
+{
+        "role" : "read",
+        "db" : "SchoolDB",
+        "isBuiltin" : true,
+        "roles" : [ ],
+        "inheritedRoles" : [ ]
+}
+{
+        "role" : "dbAdmin",
+        "db" : "SchoolDB",
+        "isBuiltin" : true,
+        "roles" : [ ],
+        "inheritedRoles" : [ ]
+}
+{
+        "role" : "dbOwner",
+        "db" : "SchoolDB",
+        "isBuiltin" : true,
+        "roles" : [ ],
+        "inheritedRoles" : [ ]
+}
+{
+        "role" : "readWrite",
+        "db" : "SchoolDB",
+        "isBuiltin" : true,
+        "roles" : [ ],
+        "inheritedRoles" : [ ]
+}
+{
+        "role" : "userAdmin",
+        "db" : "SchoolDB",
+        "isBuiltin" : true,
+        "roles" : [ ],
+        "inheritedRoles" : [ ]
+}
+
+After Enable Authorization------------------------------------------------------------------------------------------------------------------
+
+C:\Users\anujk>mongo
+MongoDB shell version v5.0.8
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("dcc4542b-8553-4bf0-a3e4-af17d7a354dd") }
+MongoDB server version: 5.0.8
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+> use SchoolDB
+switched to db SchoolDB
+> show collections
+Warning: unable to run listCollections, attempting to approximate collection names by parsing connectionStatus
+> db.Student.find()
+Error: error: {
+        "ok" : 0,
+        "errmsg" : "command find requires authentication",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+}
+
+Authorization
+
+
+C:\Users\anujk>mongo --authenticationDatabase "SchoolDB" -u "anujkumar" -p "123456"
+MongoDB shell version v5.0.8
+connecting to: mongodb://127.0.0.1:27017/?authSource=SchoolDB&compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("530659f1-3bcb-4971-8dd8-b23d8c9b968f") }
+MongoDB server version: 5.0.8
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+> show dbs
+SchoolDB  0.000GB
+
+> use SchoolDB
+switched to db SchoolDB
+
+> db.Student.find()
+{ "_id" : ObjectId("62a0bdd228ae00befe383834"), "Name" : "Anuj", "Age" : 24, "Gender" : "Male" }
+{ "_id" : ObjectId("62a0bf570134165b0b708118"), "Name" : "Rohit", "Age" : 25 }
+
+> db.Student.insertOne({Name:"Sumit",age:30})
+uncaught exception: WriteCommandError({
+        "ok" : 0,
+        "errmsg" : "not authorized on SchoolDB to execute command { insert: \"Student\", ordered: true, lsid: { id: UUID(\"530659f1-3bcb-4971-8dd8-b23d8c9b968f\") }, $db: \"SchoolDB\" }",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+}) :
+WriteCommandError({
+        "ok" : 0,
+        "errmsg" : "not authorized on SchoolDB to execute command { insert: \"Student\", ordered: true, lsid: { id: UUID(\"530659f1-3bcb-4971-8dd8-b23d8c9b968f\") }, $db: \"SchoolDB\" }",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+})
